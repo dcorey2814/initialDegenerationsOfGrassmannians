@@ -35,6 +35,13 @@ stepwiseSaturateNoBayer = (I,g) -> (
 -- g is a list of homogeneous elements of ring I.
 -- returns the saturation of I with respect to the elements in g.
 
+GrGfan = (d,n) -> (
+    nCd := subsets(n,d);
+    Gr := Grassmannian(d-1,n-1,CoefficientRing=>QQ);
+    RGrGfan := QQ[apply(nCd, l->value("p"|l#0|l#1|l#2))];
+    gfanConversion := map(RGrGfan,ring Gr, matrix{for l from 0 to #nCd-1 list (gens RGrGfan)#l});
+    gfanConversion(Gr)    
+    )
 
 
 TSC = S -> (
@@ -50,7 +57,6 @@ TSC = S -> (
 	);
     return output
     )
-
 -- given a rank 3 matroid S, this computes the ideal of Gr_S in QQ[pijk^{pm}] (note that 
 -- we saturate with respect to the pijk.)
 
@@ -402,23 +408,27 @@ affineLimitTSCSubgraph = (S, SD, C, B, k) -> (
 --    D#"ideal" = D#"idealPreSat" saturated with respect to D#"basesX".
 --    D#"graph" = dual graph to the subdivision SD.
 --    D#"ideals" = list of the ideals D#"tsc" as ideals of D#"ring".
+--    D#"singularLocus" computes the singular locus of  D#"ideal" and saturates with respect to the elements of D#"basesX".
 
 
 
 
 
--- to compute TGr_0(3,7), run tropicalizeWithVector(simpled3n7#0, w, sym, signs)
--- where w = {-1,0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0},
+-- to compute TGr_0(3,7), set 
+-- w = {-1,0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0},
 -- sym = {(0, 1, 3, 2, 4, 6, 5, 8, 7, 9, 10, 12, 11, 14, 13, 15, 17, 16, 18, 19, 20, 22, 21, 24, 23, 25, 27, 26, 28, 29, 31, 30, 32, 33, 34), (3, 6, 8, 9, 12, 14, 15, 17, 18, 19, 22, 24, 25, 27, 28, 29, 31, 32, 33, 34, 0, 1, 2, 4, 5, 7, 10, 11, 13, 16, 20, 21, 23, 26, 30)} 
 -- signs = {(-1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)}
+
+-- and run
+-- TGr37 = tropicalizeWithVector(simpled3n7#0, w, sym, signs) 
 -- note that simpled3n7#0 is the uniform matroid.
 
 -- this takes a while, but the output to gfan is contained in the file TGr37.txt,
--- so this can data can be recovered by running  parseTropFile("TGr37.txt"). 
+-- so this can data can be recovered by running  
+-- TGr37 = parseTropFile("TGr37.txt"). 
 
--- assume that this mutableHashTable is labeled TGr37. 
 
--- to generate all matroid subdivisions, run:
+-- To generate all matroid subdivisions, run:
 
 -- MSD37 = new MutableHashTable
 -- for i in (0..#(TGr37#"relativeInteriorVectors") -1 ) do (
@@ -429,7 +439,9 @@ affineLimitTSCSubgraph = (S, SD, C, B, k) -> (
 -- this makes a hashTable, a key is a relative interior point of TGr_0(3,7), 
 -- and its value is the corresponding matroid subdivision of Delta(3,7).
 
--- Let I37 = TSC(simpled3n7#0), this is the ideal of Gr_0(3,7).
+-- Let
+-- I37 = TSC(simpled3n7#0)
+-- this is the ideal of Gr_0(3,7).
 -- to compute the ideal of in_w Gr_0(3,7), run:
 -- inw(w, I37)
 -- Note that this saturates the initial ideal with respect to the product of the variables pijk
@@ -441,18 +453,24 @@ affineLimitTSCSubgraph = (S, SD, C, B, k) -> (
 -- we do this because we think of this as an ideal of k[pijk^{pm}].
 
 
--- to show that in_w Gr_0(3,7) == limit_{Delta_w} Gr_M , just test that 
--- inw(w, I37) and limitTSC(ring I37, w) are equal. 
+-- for a given w, to show that in_w Gr_0(3,7) == limit_{Delta_w} Gr_M , run
+-- inw(w, I37) == limitTSC(ring I37, w) 
+
+-- to check all in_w Gr_0(3,7) == limit_{Delta_w} Gr_M, one could run:
+-- all(TGr37#"relativeInteriorVectors", w-> inw(w, I37) == limitTSC(ring I37,w) )
 
 
--- Now, to show that the limit of thin Schubert cells over the "center" 
--- part of a matroid subdivision Delta_w is smooth, run 
 
--- affineLimitTSCSubgraph(S, SD, C, B, QQ)
+-- For a given w, to show that the limit of thin Schubert cells over the "center" 
+-- part of a matroid subdivision Delta_w is smooth, set
 
--- where S = simpled3n7#0, SD = matroidSubdivision(S, w)
+-- S = simpled3n7#0 
+-- SD = matroidSubdivision(S, w)
 -- C = nonLeaves(graph(adjacencyMatrixSubDivision(SD))) 
 -- B = commonBasis(for i in C list SD#i)
+-- and run 
+-- A = affineLimitTSCSubgraph(S, SD, C, B, QQ)
+
 
 -- this will give a mutableHashTable, call it A. If  A#"singularLocus" == ideal 1,
 -- then this limit of thin Schubert cells is smooth (note that in computing the singular locus,
@@ -460,7 +478,26 @@ affineLimitTSCSubgraph = (S, SD, C, B, k) -> (
 -- invertible in the ambient ring of the limit.) 
 
 
+-- to check that all are smooth, run
 
+-- smoothTests = {}
+-- for i in (0..#(TGr37#"relativeInteriorVectors") - 1) do (
+--     w := TGr37#"relativeInteriorVectors"#i
+--     S := simpled3n7#0;
+--     SD := matroidSubdivision(S,w);
+--     C :=  nonLeaves(graph(adjacencyMatrixSubDivision(SD))) ;
+    
+--     if #C >0 then (
+-- 	B := commonBasis(for i in C list SD#i);
+--     	A := affineLimitTSCSubgraph(S, SD, C, B, QQ);
+--     	smoothTests = append(smoothTests, A#"singularLocus")
+    
+--     )
+
+-- all(smoothTests, i -> i==ideal(1))
+
+-- note that we ignore the case where there are no leaves in the graph (#C>0 above). In this situation we already prove that
+-- the limit of thin Schubert cells is smooth in the paper. 
 
 
 
