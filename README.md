@@ -8,7 +8,7 @@ For the proof that initial degenerations are isomorphic to limits of thin Schube
 
 TGr37.txt contains the data of the Groebner fan structure of TGr_0(3,7) computed by gfan, which can be done using initialDegenerationsMSD.m2 below.
 
-initialDegenerationsMSD.m2 contains the Macaulay2 (v1.15) code used in the proofs that initial degenerations are isomorphic to limits of thin schubert cells, and in the proof that the limits are smooth. More information on how to use this in the proofs is given in the coments at the end of the file. 
+initialDegenerationsMSD.m2 contains the Macaulay2 (v1.15) code used in the proofs that initial degenerations are isomorphic to limits of thin schubert cells, and in the proof that the limits are smooth. More information on how to use this in the proofs is given in the coments at the end of the file.  Note that this requires gfan (works with v0.5) and polymake (works with v3.2).
 
 
 
