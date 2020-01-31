@@ -7,18 +7,13 @@ load("grobToSecondaryFanFunctions.sage")
 
 secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)}
                     
-# if not using the precomputed files, do this with load("computeSecondaryFromGrobFan.sage")
-
-
+# if not using the precomputed files, compute secondaryRepsDim with load("computeSecondaryFromGrobFan.sage")
                     
 maximalSecondaryCones = set.union(*act_by_G(S7OnRayIndices, set(secondaryRepsDim[6])).values())
 
 
 starsDimensionDict = {i:star_dict(maximalSecondaryCones, secondaryRepsDim[i]) for i in range(1,6)}
 # This is a dictionary where the keys are the dimensions (mod lineality) of the nonmaximal cones, and the value a dimension is another dictionary similar to the output of "star_dict" when  "cones" is the list of all maximal cones in the secondary fan (maximalSecondaryCones), and faceReps will be representatives (up to S7 symmetry) of all non-maximal cones of the given dimension.
-
-
-
 
 pool = Pool(processes=8)  # can set the parameter of Pool to the number of cpus you want to use. an empty parameter just uses all available cpus. We use 8 for the computation below. 
 
@@ -39,4 +34,4 @@ for j in [2,3,4,5]:  # this tests all cones of dimensions 2,3,4,5. Only dimensio
         allTestsDimj.append(all([e==j+7 for e in tests]))   # the "j+7" is the dimension of the cone, taking into account the lineality space.  
     allTests2345.append(allTestsDimj)
 
-print(allTests2345) # if True, then intersection maxCone1 and (-1)maxCone2 = 0 in N_R/span(cone) for all cones except the 1-dimensional ones.  
+print(all(allTests2345)) # if True, then intersection maxCone1 and (-1)maxCone2 = 0 in N_R/span(cone) for all cones except the 1-dimensional ones.  
