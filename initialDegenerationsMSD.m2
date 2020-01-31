@@ -412,101 +412,123 @@ affineLimitTSCSubgraph = (S, SD, C, B, k) -> (
 
 
 
+-- Instructions on how to use this program to verify claims in the paper (initial degenerations iso to limits, and in the proof that limits are smooth). 
+-- note: requires polymake and gfan. This works with polymake v3.2 and gfan v0.5.
+
+-- -- to compute TGr_0(3,6), set 
+-- sym36 = {(0, 1, 3, 2, 4, 6, 5, 8, 7, 9, 10, 12, 11, 14, 13, 15, 17, 16, 18, 19), (3, 6, 8, 9, 12, 14, 15, 17, 18, 19, 0, 1, 2, 4, 5, 7, 10, 11, 13, 16)};
+-- signs36 = {(-1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1), (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)};
+-- -- and run
+-- TGr36 = tropicalize(TSC(simpled3n6#0), sym36, signs36) 
+-- -- note that simpled3n6#0 is the uniform matroid.
 
 
--- to compute TGr_0(3,7), set 
--- w = {-1,0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0},
--- sym = {(0, 1, 3, 2, 4, 6, 5, 8, 7, 9, 10, 12, 11, 14, 13, 15, 17, 16, 18, 19, 20, 22, 21, 24, 23, 25, 27, 26, 28, 29, 31, 30, 32, 33, 34), (3, 6, 8, 9, 12, 14, 15, 17, 18, 19, 22, 24, 25, 27, 28, 29, 31, 32, 33, 34, 0, 1, 2, 4, 5, 7, 10, 11, 13, 16, 20, 21, 23, 26, 30)} 
--- signs = {(-1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)}
 
--- and run
--- TGr37 = tropicalizeWithVector(simpled3n7#0, w, sym, signs) 
--- note that simpled3n7#0 is the uniform matroid.
+-- -- to compute TGr_0(3,7), set 
+-- w37 = {-1,0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0}, -- this is in the relative interior of a maximal cone of TGr_0(3,7), compare to the first maximal cone in https://www.uni-math.gwdg.de/jensen/Research/G3_7/grassmann3_7.html
+-- sym37 = {(0, 1, 3, 2, 4, 6, 5, 8, 7, 9, 10, 12, 11, 14, 13, 15, 17, 16, 18, 19, 20, 22, 21, 24, 23, 25, 27, 26, 28, 29, 31, 30, 32, 33, 34), (3, 6, 8, 9, 12, 14, 15, 17, 18, 19, 22, 24, 25, 27, 28, 29, 31, 32, 33, 34, 0, 1, 2, 4, 5, 7, 10, 11, 13, 16, 20, 21, 23, 26, 30)} 
+-- signs37 = {(-1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)}
 
--- this takes a while (~1 hour), but the output to gfan is contained in the file TGr37.txt,
--- so this can data can be recovered by running  
--- TGr37 = parseTropFile("TGr37.txt"). 
+-- -- and run
+-- TGr37 = tropicalizeWithVector(simpled3n7#0, w37, sym37, signs37) 
+-- -- note that simpled3n7#0 is the uniform matroid.
+
+-- -- this takes a while (~1 hour), but the output to gfan is contained in the file TGr37.txt,
+-- -- so this can data can be recovered by running  
+-- TGr37 = parseTropFile("TGr37.txt")
 
 
--- To generate all matroid subdivisions, run:
 
-MSD37 = new MutableHashTable
-for i in (0..#(TGr37#"relativeInteriorVectors") -890 ) do (
-    wi := TGr37#"relativeInteriorVectors"#i;
-    MSD37#wi = matroidSubdivision(simpled3n7#0, wi);
-    )
+-- -- To generate all matroid subdivisions, run:
 
--- this makes a hashTable, a key is a relative interior point of TGr_0(3,7), 
--- and its value is the corresponding matroid subdivision of Delta(3,7).
+-- MSD36 = new MutableHashTable
+-- for i in (0..#(TGr36#"relativeInteriorVectors") - 1 ) do (
+--     wi := TGr36#"relativeInteriorVectors"#i;
+--     MSD36#wi = matroidSubdivision(simpled3n6#0, wi);
+--     )
 
--- Let
--- I37 = TSC(simpled3n7#0)
--- this is the ideal of Gr_0(3,7).
--- to compute the ideal of in_w Gr_0(3,7), run:
+
+-- MSD37 = new MutableHashTable
+-- for i in (0..#(TGr37#"relativeInteriorVectors") - 1 ) do (
+--     wi := TGr37#"relativeInteriorVectors"#i;
+--     MSD37#wi = matroidSubdivision(simpled3n7#0, wi);
+--     )
+
+-- -- this makes a hashTable, a key is a relative interior point of TGr_0(3,7), 
+-- -- and its value is the corresponding matroid subdivision of Delta(3,7).
+
+-- -- Let
+-- I36 = TSC(simpled3n6#0) -- this is the ideal of Gr_0(3,6).
+-- I37 = TSC(simpled3n7#0) -- this is the ideal of Gr_0(3,7).
+
+-- -- to compute the ideal of, e.g., in_w Gr_0(3,7), run:
 -- inw(w, I37)
--- Note that this saturates the initial ideal with respect to the product of the variables pijk
--- we do this because we think of this as an ideal of k[pijk^{pm}].
 
--- to compute the limit of thin Schubert cells over the subdivision Delta_w, run
--- limitTSC(ring I37, w)
--- Note that this saturates the initial ideal with respect to the product of the variables pijk
--- we do this because we think of this as an ideal of k[pijk^{pm}].
+-- -- Note that this saturates the initial ideal with respect to the product of the variables pijk
+-- -- we do this because we think of this as an ideal of k[pijk^{pm}].
+-- -- To compute the limit of thin Schubert cells over the subdivision Delta_w, run
 
 
--- for a given w, to show that in_w Gr_0(3,7) == limit_{Delta_w} Gr_M , run
--- w = TGr37#"relativeInteriorVectors"#900
+-- limitTSC(ring I37, matroidSubdivision(simpled3n7#0, w))
+
+-- -- Note that this saturates the initial ideal with respect to the product of the variables pijk
+-- -- we do this because we think of this as an ideal of k[pijk^{pm}].
+
+
+-- -- for a given w, to show that in_w Gr_0(3,7) == limit_{Delta_w} Gr_M , run
 -- inw(w, I37) == limitTSC(ring I37, matroidSubdivision(simpled3n7#0, w)) 
+-- -- or since the matroid subdivivisions were already computed, run
 -- inw(w, I37) == limitTSC(ring I37, MSD37#w) 
 
--- to check all in_w Gr_0(3,7) == limit_{Delta_w} Gr_M, one could run:
--- all(TGr37#"relativeInteriorVectors", w-> inw(w, I37) == limitTSC(ring I37, matroidSubdivision(simpled3n7#0, w)))
--- all(TGr37#"relativeInteriorVectors", w-> inw(w, I37) == MSD#w)
 
--- this takes ~2.5 hours.
+-- -- to check all in_w Gr_0(3,6) == limit_{Delta_w} Gr_M, one could run:
+-- all(TGr36#"relativeInteriorVectors", w-> inw(w, I36) == limitTSC(ring I36, MSD36#w))
 
 
--- For a given w, to show that the limit of thin Schubert cells over the "center" 
--- part of a matroid subdivision Delta_w is smooth, set
+-- -- to check all in_w Gr_0(3,7) == limit_{Delta_w} Gr_M, one could run:
+-- all(TGr37#"relativeInteriorVectors", w-> inw(w, I37) == limitTSC(ring I37, MSD37#w))
+-- -- this takes ~2.5 hours.
 
 
+-- -- For a given w, to show that the limit of thin Schubert cells over the "center" 
+-- -- part of a matroid subdivision Delta_w is smooth, set
 
--- S = simpled3n7#0 
--- SD = MSD37#wt
--- C = nonLeaves(graph(adjacencyMatrixSubDivision(SD))) 
--- B = commonBasis(for i in C list SD#i)
+-- S = simpled3n7#0  -- the uniform matroid
+-- SD = MSD37#w -- the madroid subdivision Delta_w precomputed above
+-- C = nonLeaves(graph(adjacencyMatrixSubDivision(SD))) -- the indices of the matroids in SD that are not leaves in the dual graph Gamma_w
+-- B = commonBasis(for i in C list SD#i) -- a basis common to all matroids in SD whose index is in C
+
 -- -- and run 
 -- A = affineLimitTSCSubgraph(S, SD, C, B, QQ)
 
 
--- this will give a mutableHashTable, call it A. If  A#"singularLocus" == ideal 1,
--- then this limit of thin Schubert cells is smooth (note that in computing the singular locus,
--- we saturate with respect to each element of A#"basesX" since these elements are viewed as 
--- invertible in the ambient ring of the limit.) 
+-- -- this will give a mutableHashTable, call it A. If  A#"singularLocus" == ideal 1,
+-- -- then this limit of thin Schubert cells is smooth (note that in computing the singular locus,
+-- -- we saturate with respect to each element of A#"basesX" since these elements are viewed as 
+-- -- invertible in the ambient ring of the limit.) 
 
 
--- to check that all are smooth, run
+-- -- to check that all are smooth, run
 
 -- smoothTests = {}
 -- for i in (0..#(TGr37#"relativeInteriorVectors") - 1) do (
 --     w := TGr37#"relativeInteriorVectors"#i;
 --     S := simpled3n7#0;
 --     SD := MSD37#w;		    
---     C :=  nonLeaves(graph(adjacencyMatrixSubDivision(SD))) ;
+--     C :=  nonLeaves(graph(adjacencyMatrixSubDivision(SD))); 
+    
     
 --     if #C >0 then (
--- 	B := commonBasis(for i in C list SD#i);
---     	A := affineLimitTSCSubgraph(S, SD, C, B, QQ);
---     	smoothTests = append(smoothTests, A#"singularLocus");
+-- 	B := commonBasis(for j in C list SD#j);
+--     	time A := affineLimitTSCSubgraph(S, SD, C, B, QQ); 
+--     	smoothTests = append(smoothTests, A#"singularLocus"); 
 --     );
 -- )
 
+-- all(smoothTests, i->i==ideal(1_(ring i)))
 
--- note that we ignore the case where there are no leaves in the graph (#C>0 above). In this situation we already prove that
--- the limit of thin Schubert cells is smooth in the paper. 
+-- -- will return "true"
 
-
-
-
-
-
+-- -- note that we ignore the case where there are no leaves in the graph (#C>0 above). In this situation we already prove that
+-- -- the limit of thin Schubert cells is smooth in the paper. 
 
