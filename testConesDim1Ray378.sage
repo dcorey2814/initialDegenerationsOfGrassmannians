@@ -27,7 +27,7 @@ pool = Pool(processes=8)  # can set the parameter of Pool to the number of cpus 
 # Say maxCone1 and maxCone2 are maximal cones in Star(cone). We want to show that maxCone1 intersects (-1)maxCone2 at 0 in N_R/span(cone). To do this, we put the rays of "cone" in the lineality spaces of maxCone1 and maxCone2, intersect maxCone1 and (-1)maxCone2, and show that this intersection has dimension that of cone.
 
 
-cone = secondaryRepsDim[1][tuple([378])]
+cone = tuple([378])
 sL = len(starsDimensionDict[1][cone])
 pairs=list(itt.combinations(range(sL),2))
 partial_test = partial(test_pair, starsDimensionDict, rays37, lineality37, 1, cone) # this is a preparation to use the pool.map function
