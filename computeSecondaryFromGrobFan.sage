@@ -29,9 +29,6 @@ for msd in MSDToGrob.keys():
     secondaryToGrob[secondaryCone] = MSDToGrob[msd]
 # A dictionary where the keys are the union of all the cones in MSDToGrob[MSDi] (a cone in the secondary fan), and the value is MSDToGrob[MSDi] (the cones in the Groebner fan that glue to give the cone in the secondary fan).
 
-    
-S7OnRayIndices = G_in_NRays(7,Bases37,set([(1,0,2,3,4,5,6), (1,2,3,4,5,6,0)]),rays37)
-# This is the action of S7 on (0,...,len(rays37)-1) i.e. the action of S7 on the ray indices.
 
 secondaryReps = G_orbits(S7OnRayIndices, set(secondaryToGrob.keys()))
 # This gives S7-orbit representatives of the cones in the secondary fan, i.e., the keys of the dictionary secondaryToGrob. 

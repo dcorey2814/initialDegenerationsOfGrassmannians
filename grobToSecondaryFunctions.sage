@@ -205,6 +205,9 @@ def test_pair(starDict, rays, lineality, dim, cone, pair):
 S7 = groupFromGenerators(7,set([(1,0,2,3,4,5,6), (1,2,3,4,5,6,0)]))
 # this is a set of tuples, it consists of all permutations of 0,...,6. 
 
+S7OnRayIndices = G_in_NRays(7,Bases37,set([(1,0,2,3,4,5,6), (1,2,3,4,5,6,0)]),rays37)
+# This is the action of S7 on (0,...,len(rays37)-1) i.e. the action of S7 on the ray indices.
+
 
 S7_in_NBases=[s_to_NBases(7,Bases37,s) for s in S7]
 # This is a copy of S7 in S35 given by the action of S7 on the triples ijk for i,j,k in [7].
