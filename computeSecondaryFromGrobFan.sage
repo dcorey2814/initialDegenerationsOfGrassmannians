@@ -3,7 +3,7 @@ import time
 from multiprocessing import Pool
 from functools import partial
 
-load("grobToSecondaryFanFunctions.sage")
+load("grobToSecondaryFunctions.sage")
 
 
 MSDToGrob = {}
