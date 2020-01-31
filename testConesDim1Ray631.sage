@@ -3,11 +3,11 @@ import time
 from multiprocessing import Pool
 from functools import partial
 
-load("grobToSecondaryFanFunctions.sage")
+load("grobToSecondaryFunctions.sage")
 
-secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)}
+secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)) for i in range(1,7)}
                     
-# if not using the precomputed files, do this with load("computeSecondaryFromGrobFan.sage")
+# if not using the precomputed files, compute secondaryRepsDim with load("computeSecondaryFromGrobFan.sage")
 
 
                     

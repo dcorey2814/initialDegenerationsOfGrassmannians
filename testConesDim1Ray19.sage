@@ -3,10 +3,10 @@ import time
 from multiprocessing import Pool
 from functools import partial
 
-load("grobToSecondaryFanFunctions.sage")
+load("grobToSecondaryFunctions.sage")
 
-secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)}
-# if not using the precomputed files, do this with load("computeSecondaryFromGrobFan.sage")
+secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)) for i in range(1,7)}
+# if not using the precomputed files, compute secondaryRepsDim with load("computeSecondaryFromGrobFan.sage")
                     
 maximalSecondaryCones = set.union(*act_by_G(S7OnRayIndices, set(secondaryRepsDim[6])).values())
 
@@ -29,7 +29,7 @@ pairs=list(itt.combinations(range(sL),2))
 pairsSlices =[pairs[i:i+len(10000000)] for i in range(10)].append(pairs[100000000:])
 # this splits up pairs into roughly 11 equal sized pieces. 
 
-k=0 # change this parameter 0,1,..., 11 to verify each piece.
+k=0 # change this parameter to 0,1,..., 11 to verify each piece.
 tests = pool.map(partial_test, pairsSlices[k]) # this tests all pairs of maximal cones in a parallel computation.
 
 print(all([e==8 for e in tests])) # if True, then intersection maxCone1 and (-1)maxCone2 = 0 in N_R/span(cone).  

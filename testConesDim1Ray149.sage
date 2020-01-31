@@ -3,12 +3,11 @@ import time
 from multiprocessing import Pool
 from functools import partial
 
-load("grobToSecondaryFanFunctions.sage")
+load("grobToSecondaryFunctions.sage")
 
-secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)}
-                    
-# if not using the precomputed files, do this with load("computeSecondaryFromGrobFan.sage")
+secondaryRepsDim = {i: fileToLists("secondaryConesDim{}".format(i)) for i in range(1,7)}
 
+# if not using the precomputed files, compute secondaryRepsDim with load("computeSecondaryFromGrobFan.sage")
 
                     
 maximalSecondaryCones = set.union(*act_by_G(S7OnRayIndices, set(secondaryRepsDim[6])).values())
