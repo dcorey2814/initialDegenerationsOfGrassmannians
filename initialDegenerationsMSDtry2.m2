@@ -102,14 +102,70 @@ simpled3n7 = for i in (0..#n7-1) list (if isSimple(n7#i) and rank(n7#i) == 3 the
 -- -- signs37 contains the signs of the action of the permutation on a basis of Si
 -- -- These are used in the computation of TGr_Si using gfan_tropicaltraverse.
 
--- -- to compute the tropicalization of Gr_Si 
--- -- run tropicalize(TSC(simpled3n7#i), sym37#i, signs37#i)
+-- -- to compute the tropicalization of Gr_Si one could run
+-- -- tropicalize(TSC(simpled3n7#i), sym37#i, signs37#i)
+-- -- This uses gfan_tropicalstartingcone, which seems to work when i is not 0,1,3. 
+-- -- It still takes a long time. So I precomputed these fans and determined a point in the relative
+-- -- interior of a maximal cone, these are listed in wGiven.
 
--- -- we set 
+-- -- For i=0,1,3, The vectors that we provide are 0/-1 vectors with a -1 in the coordinate pijk
+-- -- whenever ijk is a nonbasis of the nonFano matroid. For the uniform matroid S0, this was the 
+-- -- vector used in "How to Draw Tropical Planes" by Hermann, Jensen, Joswig, Sturmfels in computing 
+-- -- TGr_0(3,7) (note that we order our pluecker coordinates in revlex, whereas they use lex). 
+-- -- we check that these are in the relative interior of a maximal cone below.
 
--- TGr37S = hashTable for i in (0..12)|(14..22) list {i, tropicalize(TSC(simpled3n7#i), syms37#i, signs37#i)}
 
--- TGr37S = applyValues(set((0..11)|(14..22)), i->tropicalize(TSC(simpled3n7#i), syms37#i, signs37#i))
+-- --  To check that these are maximal cones
+-- -- one must show that the Groebner cone is the same dimension of Gr_Si. 
+-- -- This is done with the function "checkMaximal" below. 
+
+
+-- wGiven = hashTable {
+--     0=> {-1,0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0},
+--     1=> {0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0},
+--     2=> {136, 73, 73, 136, 73, 73, -66, -276, -129, -11, -74, -74, 102, -108, 39, 102, -108, 39, -36, -99, -99, -133, 147, 84, -133, 147, 84, -55, -70, 0, -63, 113, 113},
+--     3=> {0,0,0,0,0,0,0,0,0,0,0,0,-1,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,0,0,0,0,0,0,0},
+--     4=> {711, -129, 735, 159, -681, 183, 504, -336, 567, -273, 591, -72, -888, -48, -624, 360, -480, -279, -321, -1161, -297, 840, -1776, 864, 288, -528, 312, 633, 696, 720, -759, 489},
+--     5=> {24, 24, -27, 16, 16, -35, 19, 19, 17, 17, -34, -9, -20, -20, -17, 12, 12, -14, -7, -7, -58, -33, 36, 36, -41, 28, 28, -38, 29, 29, 3, -5},
+--     6=> {39, 50, -30, -30, -19, -99, 50, 61, 50, 61, -19, -30, -99, -99, 61, 72, -19, 5, 16, -64, 5, 5, 16, -64, 16, 27, 16, 16, 16, 27, -64, 27},
+--     7=> {507, 147, 257, -357, -717, -607, 530, 170, 633, 273, 383, -270, -520, -1134, 656, 296, -247, -63, -423, -313, 714, -856, 464, -150, -40, 737, 840, -730, 590, -1633, 863},
+--     8=> {22, 15, -7, -25, -32, -54, 28, 21, 17, 10, -12, 12, -17, -35, 23, 16, 18, 34, 27, 5, -11, -33, -58, 40, 33, -5, 24, -38, -5, -43, 30},
+--     9=> {3, 3, -6, -7, -7, -16, 3, 3, 8, 8, -1, 3, -6, -7, 8, 8, 3, 8, 8, -1, 3, -6, -7, 8, 8, 3, -16, -1, -1, -6},
+--     10=> {10, 10, 3, 10, 10, 3, -7, -7, 7, 7, 0, -3, -10, -3, -10, -20, -27, -27, -34, 3, 16, 16, 3, 16, 16, -14, 0, 13, 13, 3, 3},
+--     11=> {5, 1, 1, -1, -5, -5, 5, 1, -1, -5, -5, 5, 1, -1, -1, 5, 8, 4, 4, -6, -6, -12, 8, 4, -6, 8, -12, 4, -6, 8},
+--     14=> {194, 144, -81, -81, 144, 94, 104, 54, -171, -171, 54, 4, 178, -497, -97, 128, 104, 54, -171, -171, 54, 4, -497, 178, 128, -97, 88, 88, 38, 38, 162},
+--     15=> {4, 4, -2, 2, 2, 2, 4, 4, -2, 2, 2, 2, -10, -4, -4, -6, -2, -2, -8, -4, -4, -4, -1, 5, 5, 3, -1, 5, 5, 3},
+--     16=> {7158, 78, 4968, -4347, 8508, 1428, 3972, -3108, 1782, -7533, 5322, -1758, 705, -6375, -10800, 2001, -5079, -189, -9504, 3351, -3729, 9774, -33126, 7584, 11124, 6588, -4452, 4398, 7938, 3321},
+--     17=> {365508, 467748, -660087, -660087, 467748, 569988, 231957, 334197, -793638, -793638, 334197, 436437, 207675, 309915, -817920, 231957, 334197, -793638, -793638, 334197, 436437, 207675, -817920, 309915, 74124, 74124, 176364, 176364, 49842},
+--     18=> {13, 13, -15, -25, 18, 18, 13, 13, -15, -25, 18, 18, -2, -2, -40, 2, 2, -26, -36, 7, 7, 15, -13, 20, 15, -13, 20, 0},
+--     19=> {2, 2, -3, -1, 3, 3, 2, 2, -3, -1, 3, 3, -3, -3, -6, -1, -1, -6, -4, 0, 0, 3, 3, 0, 3, 3, 0},
+--     20=> {35, 35, -65, 15, -15, -15, -75, 35, 35, 15, 35, 35, -65, 15, -15, -15, -75, 35, 35, 15, -20, 20, 20, 0, -20},
+--     21=> {8, 8, -26, -4, 4, 4, -12, 10, 10, -2, 8, 8, -26, -4, 4, 4, -12, 10, 10, -2, 8, 8, -4, -12},
+--     22=> {8, 8, -17, 3, -2, -2, -2, 3, 3, -2, -17, 8, 8, 3, -2}
+--         }
+
+
+-- checkMaximal = (i,w) -> (
+--     GrSi = TSC(simpled3n7#i);
+--     gc := groebnerConeData(ring GrSi,(GrSi)_*,  w);
+--     return dim GrSi == gc#"dim"
+--     )
+
+-- all((0..11)|(14..22), i-> checkMaximal(i,wGiven#i))
+
+
+-- -- note that i=12 and 13 are missing. i=13 is the Fano matroid, which is nonrealizable / QQ.
+-- -- For i=12, TGr_S12 is a linear space, this can be checked by running
+--  tropicalize(TSC(simpled3n7#12), sym37#12, signs37#12)
+-- -- and observing that there are no rays. Since there are no rays, there is nothing to check here
+-- -- so we omit it in the future computations.
+
+-- -- Then one can compute the tropicalization by running
+-- -- tropicalizeWithVector(TSC(simpled3n7#i), wGiven#i, syms37#i, signs37#i)
+
+  
+TGr36S = hashTable for i in (0..11)|(14..22)  list {i, tropicalizeWithVector(TSC(simpled3n7#i), wGiven#i, syms37#i, signs37#i)}
+
 
 -- -- To generate all matroid subdivisions, run:
 
@@ -126,7 +182,7 @@ simpled3n7 = for i in (0..#n7-1) list (if isSimple(n7#i) and rank(n7#i) == 3 the
 -- -- and its value is the corresponding matroid subdivision of Delta_S.
 
 
--- I37 = hashTable for i in (0..11)|(14..22) list {i, TSC(simpled3n7#i)};  -- this is a list of the ideals of the Gr_S
+-- I37 = hashTable for i in (0..12)|(14..22) list {i, TSC(simpled3n7#i)};  -- this is a list of the ideals of the Gr_S
 
 
 -- -- to compute the ideal of in_w Gr_Si, run:
