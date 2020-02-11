@@ -1,0 +1,57 @@
+_application fan
+_version 2.2
+_type SymmetricFan
+
+AMBIENT_DIM
+16
+
+DIM
+6
+
+LINEALITY_DIM
+6
+
+RAYS
+
+N_RAYS
+0
+
+LINEALITY_SPACE
+1 0 0 0 -1 -1 0 -1 0 -1 -1 0 -1 -1 -1 -1
+0 1 0 0 1 0 0 1 0 1 0 1 1 1 0 1
+0 0 1 0 0 1 0 0 0 0 1 -1 0 -1 0 -1
+0 0 0 1 1 1 0 0 0 0 0 -1 -1 0 0 -1
+0 0 0 0 0 0 1 1 0 0 0 1 1 1 1 2
+0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1
+
+ORTH_LINEALITY_SPACE
+1 0 0 0 0 0 0 -1 0 0 0 -2 1 1 -1 1
+0 1 0 0 0 0 0 -1 0 0 0 -1 0 0 0 1
+0 0 1 0 0 0 0 -1 0 0 0 -1 0 1 -1 1
+0 0 0 1 0 0 0 -1 0 0 0 -1 1 0 -1 1
+0 0 0 0 1 0 0 -1 0 0 0 0 0 -1 0 1
+0 0 0 0 0 1 0 -1 0 0 0 0 0 0 -1 1
+0 0 0 0 0 0 1 -1 0 0 0 -1 1 1 -1 0
+0 0 0 0 0 0 0 0 1 0 0 -1 0 0 -1 1
+0 0 0 0 0 0 0 0 0 1 0 0 -1 -1 0 1
+0 0 0 0 0 0 0 0 0 0 1 0 -1 0 -1 1
+
+F_VECTOR
+1
+
+SIMPLICIAL
+1
+
+PURE
+1
+
+SYMMETRY_GENERATORS
+0 6 3 11 15 13 8 14 1 7 4 2 5 12 9 10
+4 1 7 3 0 6 5 2 13 11 15 9 12 8 14 10
+
+CONES_ORBITS
+{}	# New orbit	# Dimension 6
+
+MAXIMAL_CONES_ORBITS
+{}	# New orbit	# Dimension 6
+
