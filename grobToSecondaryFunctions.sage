@@ -1,8 +1,6 @@
-
 import itertools as itt
 import time
-from multiprocessing import Pool
-from functools import partial
+
 load("gRaysConesS00.sage")
 # this contains: rays37, lineality37, coneReps, Matroids37_orbits
 
@@ -189,7 +187,6 @@ def test_pair(starDict, rays, lineality, dim, cone, pair):
 #"rays" is a list of the rays of the fan, this should be a list, where each list is a tuple representing a ray, "lineality" is a a list consisting of a basis of the lineality space (similar format to "rays"), "dim" is the dimension of "cone" minus the dimension of the lineality space, "cone" is a tuple of numbers in increasing order, where the number corresponds to the position of ray in "rays", and "pair" is a 2-uple of nonnegative integers from 0,...,len(starDict[dim][cone])
     
 # Output: Computes the maximal cones "starDict[dim][cone][pair[i]]" (i=0,1) as Polyhedron, and compute the dimension of the intersection of one with (-1) times the other. Here, the maximal cones are viewed in the the space N_R/span(cone). We account for this by taking the lineality space to be the lineality space of the fan + the span of "cone". 
-    
     star_cone = starDict[dim][cone]
     max_cone_0 = star_cone[pair[0]]
     max_cone_1 = star_cone[pair[1]]
@@ -259,6 +256,26 @@ def s_on_cone(n,s,c):
     # Input: a positive integer n (=len(s)),  a tuple "s" representing a permutation of (0,1,...,n-1), tuple "cone" of integers among range(len(rays37)) in increasing order representing a cone. 
     # Output: This permutes the coordinates of rays37[i] via s, and returns the index of the corresponding ray in rays37. 
     return tuple(sorted([s_on_ray_index(n,s,i) for i in c]))
+
+
+def coneSpan(rays, lineality, cone):
+    return span(QQ, [rays[i] for i in cone]+lineality)
+
+
+
+def intersectLinearSpansRelDim(starDict, rays, lineality, sigma):
+    sigmaSpan = coneSpan(rays,lineality,sigma)
+    sigmaSpanDim = sigmaSpan.dimension()
+    maxCones = starDict[sigma]
+    intersectConesSpan = coneSpan(rays,lineality,maxCones[0])
+    i=0
+    while intersectConesSpan.dimension() > sigmaSpanDim and i<len(maxCones):
+        newConeSpan = coneSpan(rays,lineality,maxCones[i])
+        intersectConesSpan = intersectConesSpan.intersection(newConeSpan)
+        i+=1
+    return intersectConesSpan.dimension() - sigmaSpanDim
+
+
 
 
 MSDs_index = [ tuple(sorted([ Matroids_all_bases_list_index[tuple([Bases37.index(B) for B in M])] for M in msd]))  for msd in MSDs]

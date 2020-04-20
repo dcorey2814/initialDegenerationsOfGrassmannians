@@ -21,17 +21,26 @@ pool = Pool(processes=8)  # can set the parameter of Pool to the number of cpus 
 
 # Say maxCone1 and maxCone2 are maximal cones in Star(cone). We want to show that maxCone1 intersects (-1)maxCone2 at 0 in N_R/span(cone). To do this, we put the rays of "cone" in the lineality spaces of maxCone1 and maxCone2, intersect maxCone1 and (-1)maxCone2, and show that this intersection has dimension that of cone.
 
-allTests2345 = []
-for j in [2,3,4,5]:  # this tests all cones of dimensions 2,3,4,5. Only dimension 1 is missing. 
+
+
+# allTests2345 = []
+# for j in [2,3,4,5]:  # this tests all cones of dimensions 2,3,4,5. Only dimension 1 is missing. 
+#     cones_j = secondaryRepsDim[j]  # cones of dimension j (+ dim(Lineality))
+#     allTestsDimj = []
+#     for cone in cones_j:
+#         sL = len(starsDimensionDict[j][cone])
+#         pairs=list(itt.combinations(range(sL),2))
+#         partial_test = partial(test_pair, starsDimensionDict, rays37, lineality37, j, cone) # this is a preparation to use the pool.map function
+#         tests = pool.map(partial_test, pairs) # this tests all pairs of maximal cones in parallel.
+
+#         allTestsDimj.append(all([e==j+7 for e in tests]))   # the "j+7" is the dimension of the cone, taking into account the lineality space.  
+#     allTests2345.append(allTestsDimj)
+
+# print(all(allTests2345)) # if True, then intersection maxCone1 and (-1)maxCone2 = 0 in N_R/span(cone) for all cones except the 1-dimensional ones.  
+
+allTests = []
+for j in [1,2,3,4,5]:  # this tests all cones of dimensions 2,3,4,5. Only dimension 1 is missing. 
     cones_j = secondaryRepsDim[j]  # cones of dimension j (+ dim(Lineality))
-    allTestsDimj = []
-    for cone in cones_j:
-        sL = len(starsDimensionDict[j][cone])
-        pairs=list(itt.combinations(range(sL),2))
-        partial_test = partial(test_pair, starsDimensionDict, rays37, lineality37, j, cone) # this is a preparation to use the pool.map function
-        tests = pool.map(partial_test, pairs) # this tests all pairs of maximal cones in parallel.
-
-        allTestsDimj.append(all([e==j+7 for e in tests]))   # the "j+7" is the dimension of the cone, taking into account the lineality space.  
-    allTests2345.append(allTestsDimj)
-
-print(all(allTests2345)) # if True, then intersection maxCone1 and (-1)maxCone2 = 0 in N_R/span(cone) for all cones except the 1-dimensional ones.  
+    for sigma in cones_j:
+        allTests.append(intersectLinearSpansRelDim(starsDimensionDict[j],rays37,lineality37,sigma))
+print(allTests)
