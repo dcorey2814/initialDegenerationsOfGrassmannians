@@ -2,34 +2,49 @@
 
 Here is a summary of the files. 
 
+The directories tropGr36 and tropGr37 contain the gfan outputs for the tropicalizations of thin Schubert cells of simple (3,6) and (3,7) matroids, respectively. 
+
+directory msdTropGr37 contains the matroid subdivision data. In each file, the subdivisions are separated by an extra line. Each subdivision starts with the relative interior vector w, and the remaining lines are the matroids. Each matroid is a list of numbers 0,...,34, representing a basis. The numbers indicate the position of the basis in the list of triples of [35], in the revLex order.
 
 
-For the proof that initial degenerations are isomorphic to limits of thin Schubert cells and that limits are smooth:
+For the proof of Proposition 3.9, that the dimensions of limits of thin Schubert cells over Delta_{M,w} equals the dimension of Gr_M, when (d,n)=(3,6), (3,7), and Lemma 6.4, that these limits are smooth and irreducible when the adjacency graph has no leaves:
 
-TGr37.txt contains the data of the Groebner fan structure of TGr_0(3,7) computed by gfan, which can be done using initialDegenerationsMSD.m2 below.
+initialDegenerationsMSD.m2 contains the Macaulay2 (v1.15) code used to prove Proposition 3.9 and Lemma 6.4.  More information on how to use this in the proofs is given in the coments of that file.  Note that this requires gfan (works with v0.5) and polymake (works with v3.2).
 
-initialDegenerationsMSD.m2 contains the Macaulay2 (v1.15) code used in the proofs that initial degenerations are isomorphic to limits of thin schubert cells, and in the proof that the limits are smooth. More information on how to use this in the proofs is given in the coments at the end of the file.  Note that this requires gfan (works with v0.5) and polymake (works with v3.2).
-
-
-
+functionsM2.m2 contains all of the M2 functions used in initialDegenerationsMSD.m2.
 
 
 
 
 For the proof that the Chow quotient of Gr(3,7) is the log canonical compactification of X_0(3,7), we use sage (works with sage 9.0):
 
-gRaysConesS00.sage contains: rays37, lineality37, coneReps, Matroids37_orbits.
-rays37 is a list of all the rays and lineality37 is a basis of the lineality space of TGr_0(3,7) with the Groebner fan structure. This was computed in gfan. coneReps is a dictionary: keys are the dimensions (mod lineality) of the nonzero cones, and the value at a dimension is a list of all the cones of TGr_0(3,7) of that dimension. Again, this was also computed in gfan.
+The directory secondaryFanTropGr37 contains S_7 orbit representatives of the cones of the secondary fan structure of TGr_0(3,7).
 
-Matroids37_orbits is a list of 0/1 vectors recording all the rank 3 matroids on [7]. the positions record the triple (i,j,k) in revLex, 0 indicates a nonbasis, 1 indicates a basis. This is from the database: http://www-imai.is.s.u-tokyo.ac.jp/~ymatsu/matroid/
+gRaysConesS00.sage contains: rays37, lineality37, coneReps, Matroids37_orbits.
+rays37 is a list of all the rays and lineality37 is a basis of the lineality space of TGr_0(3,7) with the Groebner fan structure. This was computed in gfan. coneReps is a dictionary: keys are the dimensions (mod lineality) of the nonzero cones, and the value at a dimension is a list of all the cones of TGr_0(3,7) of that dimension. Again, this was also computed in gfan. Matroids37_orbits is a list of 0/1 vectors recording all the rank 3 matroids on [7]. the positions record the triple (i,j,k) in revLex, 0 indicates a nonbasis, 1 indicates a basis. This is from the database: http://www-imai.is.s.u-tokyo.ac.jp/~ymatsu/matroid/
 
 Gr37MSD0.sage contains the list MSDs. This is a list of all the matroid subdivisions of nonzero cones as in coneReps above. These have the same order as coneReps, namely, it is ordered from lowest dimension cone to highest, and within each dimension i (mod lineality), the order is the same as in coneReps[i].
 
-grobToSecondaryFunctions.sage contains all of the functions and data that is obtained quickly. This is needed to run computeSecondaryFromGrobFan.sage.
+functionsSage.sage contains all of the functions and data that is obtained quickly. This is needed to run computeSecondaryFromGrobFan.sage.
 
 computeSecondaryFromGrobFan.sage will compute the dictionary secondaryRepsDim. The keys of this dictionary are the S7-reps of cones in the secondary fan structure of Gr_0(3,7) and the value of a cone is the Groebner cones that are contained in this cone. 
 
-secondaryConesDim{i}.sage ({i} = 1,2,3,4,5,6) are files that contain the i-dimensional cones of the secondary fan.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 testConesDim2345.sage: for each cone in the secondary fan of dimension 2,3,4, or 5, this  will test that Star(cone), as a fan in N_R/span(cone), contains no lines through the origin. Say maxCone1 and maxCone2 are maximal cones in Star(cone). We want to show that maxCone1 intersects (-1)maxCone2 at 0 in N_R/span(cone). To do this, we put the rays of "cone" in the lineality spaces of maxCone1 and maxCone2, intersect maxCone1 and (-1)maxCone2, and show that this intersection has dimension that of cone.
 
