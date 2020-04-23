@@ -1,7 +1,4 @@
 import itertools as itt
-import time
-from multiprocessing import Pool
-from functools import partial
 
 load("functionsSage.sage")
 
@@ -13,7 +10,7 @@ for i in range(len(coneRepsAll)):
         sCone = s_on_cone(7,s, coneRepsAll[i])
         if sMSD not in MSDToGrob.keys():
             MSDToGrob[sMSD] = set()
-        MSDToGrob[sMSD].update(sCone)
+        MSDToGrob[sMSD].add(sCone)
 # This is a dictionary where the keys are MSDs_index and the value at MSDi in MSDs_index is the list of all cones of the Groebner fan of TGr_0(3,7) whose matroid subdivision is MSDi.
 
 # Note: this takes a long time. We only need the S7-reps, namely the "secondaryRepsDim" dictionary below. The data of the cones is contained in the files "secondaryConesDim{i}.txt" where {i}=1,2,3,4,5,6. See secondaryRepsDim below for how to extract this data from the files. 

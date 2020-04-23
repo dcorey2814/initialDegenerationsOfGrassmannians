@@ -206,33 +206,7 @@ for i in (0..11)|(14..22) do (
     print all(dimLimits, L->L==dimSi);
     )
 
-
-
-time print all(TGr37S#0#"relativeInteriorVectors", w-> dim limitTSC(ring I37#0, MSD37S#0#w) == dim sub(I37#0, ring I37#0) )
-time print all(TGr37S#1#"relativeInteriorVectors", w-> dim limitTSC(ring I37#1, MSD37S#1#w) == dim sub(I37#1, ring I37#1) )
-time print all(TGr37S#2#"relativeInteriorVectors", w-> dim limitTSC(ring I37#2, MSD37S#2#w) == dim sub(I37#2, ring I37#2) )
-print all(TGr37S#3#"relativeInteriorVectors", w-> dim limitTSC(ring I37#3, MSD37S#3#w) == dim sub(I37#3, ring I37#3) )
-print all(TGr37S#4#"relativeInteriorVectors", w-> dim limitTSC(ring I37#4, MSD37S#4#w) == dim sub(I37#4, ring I37#4) )
-print all(TGr37S#5#"relativeInteriorVectors", w-> dim limitTSC(ring I37#5, MSD37S#5#w) == dim sub(I37#5, ring I37#5) )
-print all(TGr37S#6#"relativeInteriorVectors", w-> dim limitTSC(ring I37#6, MSD37S#6#w) == dim sub(I37#6, ring I37#6) )
-print all(TGr37S#7#"relativeInteriorVectors", w-> dim limitTSC(ring I37#7, MSD37S#7#w) == dim sub(I37#7, ring I37#7) )
-print all(TGr37S#8#"relativeInteriorVectors", w-> dim limitTSC(ring I37#8, MSD37S#8#w) == dim sub(I37#8, ring I37#8) )
-print all(TGr37S#9#"relativeInteriorVectors", w-> dim limitTSC(ring I37#9, MSD37S#9#w) == dim sub(I37#9, ring I37#9) )
-print all(TGr37S#10#"relativeInteriorVectors", w-> dim limitTSC(ring I37#10, MSD37S#10#w) == dim sub(I37#10, ring I37#10) )
-print all(TGr37S#11#"relativeInteriorVectors", w-> dim limitTSC(ring I37#11, MSD37S#11#w) == dim sub(I37#11, ring I37#11) )
-print all(TGr37S#14#"relativeInteriorVectors", w-> dim limitTSC(ring I37#14, MSD37S#14#w) == dim sub(I37#14, ring I37#14) )
-print all(TGr37S#15#"relativeInteriorVectors", w-> dim limitTSC(ring I37#15, MSD37S#15#w) == dim sub(I37#15, ring I37#15) )
-print all(TGr37S#16#"relativeInteriorVectors", w-> dim limitTSC(ring I37#16, MSD37S#16#w) == dim sub(I37#16, ring I37#16) )
-print all(TGr37S#17#"relativeInteriorVectors", w-> dim limitTSC(ring I37#17, MSD37S#17#w) == dim sub(I37#17, ring I37#17) )
-print all(TGr37S#18#"relativeInteriorVectors", w-> dim limitTSC(ring I37#18, MSD37S#18#w) == dim sub(I37#18, ring I37#18) )
-print all(TGr37S#19#"relativeInteriorVectors", w-> dim limitTSC(ring I37#19, MSD37S#19#w) == dim sub(I37#19, ring I37#19) )
-print all(TGr37S#20#"relativeInteriorVectors", w-> dim limitTSC(ring I37#20, MSD37S#20#w) == dim sub(I37#20, ring I37#20) )
-print all(TGr37S#21#"relativeInteriorVectors", w-> dim limitTSC(ring I37#21, MSD37S#21#w) == dim sub(I37#21, ring I37#21) )
-print all(TGr37S#22#"relativeInteriorVectors", w-> dim limitTSC(ring I37#22, MSD37S#22#w) == dim sub(I37#22, ring I37#22) )
-
-
-print apply(TGr37S#3#"relativeInteriorVectors", w-> dim limitTSC(ring I37#3, MSD37S#3#w))
-print apply(TGr37S#4#"relativeInteriorVectors", w-> dim limitTSC(ring I37#4, MSD37S#4#w))
+-- Note that this takes a long time. i=0 and i=1 took ~4700 seconds each, the rest are quicker.
 
  
 ----------------------------------------------------------------------------------------------
@@ -295,6 +269,7 @@ noLeavesAffineLimit37S = flatten for i in (0..11)|(14..22) list (
 	    ) else continue
 	)
     )
+
 
 RGr37 = QQ[(0..2)/ ( i-> (0..3)/(j-> x_(i,j)) )]
 uniqueIdeals37S = unique for i in (0..#noLeavesAffineLimit37S-1) list sub(noLeavesAffineLimit37S#i#"ideal",RGr37)
