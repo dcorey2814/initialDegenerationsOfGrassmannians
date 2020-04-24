@@ -26,3 +26,5 @@ functionsSage.sage contains all of the functions and data that is obtained quick
 
 computeSecondaryFromGrobFan.sage will compute the dictionary secondaryRepsDim. The keys of this dictionary are the S7-reps of cones in the secondary fan structure of Gr_0(3,7) and the value of a cone is the Groebner cones that are contained in this cone. 
 
+testLocalFans.sage contains the code used in the proof of Lemma 7.3.
+
